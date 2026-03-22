@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Focus Mode</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <!-- ── HEADER ────────────────────────────────────────────────────────── -->
+  <header class="popup-header">
+    <div class="logo">
+      <!-- Simple play-button icon made with CSS in popup.css -->
+      <div class="logo-icon" aria-hidden="true"></div>
+      <span class="logo-text">Focus Mode</span>
+    </div>
+    <p class="tagline">Take back your YouTube</p>
+  </header>
+
+
+  <!-- ── TOGGLE LIST ───────────────────────────────────────────────────── -->
+  <main class="toggle-list">
+
+    <!--
+      Each toggle is a <label> wrapping a checkbox.
+      The checkbox is hidden — the visible UI is the styled label.
+      Clicking anywhere on the row toggles the checkbox.
+    -->
+
+    <label class="toggle-row" for="toggle-shorts">
+      <div class="toggle-info">
+        <span class="toggle-title">Block Shorts</span>
+        <span class="toggle-desc">Removes Shorts from nav, feeds, and search</span>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="toggle-shorts" data-setting="hideShorts" />
+        <span class="switch-track" aria-hidden="true">
+          <span class="switch-thumb"></span>
+        </span>
+      </div>
+    </label>
+
+    <label class="toggle-row" for="toggle-sidebar">
+      <div class="toggle-info">
+        <span class="toggle-title">Hide Sidebar</span>
+        <span class="toggle-desc">Removes the "Up Next" recommendations on watch pages</span>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="toggle-sidebar" data-setting="hideSidebar" />
+        <span class="switch-track" aria-hidden="true">
+          <span class="switch-thumb"></span>
+        </span>
+      </div>
+    </label>
+
+    <label class="toggle-row" for="toggle-homepage">
+      <div class="toggle-info">
+        <span class="toggle-title">Clean Home Page</span>
+        <span class="toggle-desc">Hides the infinite video grid on youtube.com</span>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="toggle-homepage" data-setting="hideHomepage" />
+        <span class="switch-track" aria-hidden="true">
+          <span class="switch-thumb"></span>
+        </span>
+      </div>
+    </label>
+
+    <label class="toggle-row" for="toggle-endcards">
+      <div class="toggle-info">
+        <span class="toggle-title">Remove End Cards</span>
+        <span class="toggle-desc">Hides video overlay cards at the end of videos</span>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="toggle-endcards" data-setting="hideEndcards" />
+        <span class="switch-track" aria-hidden="true">
+          <span class="switch-thumb"></span>
+        </span>
+      </div>
+    </label>
+
+  </main>
+
+
+  <!-- ── FOOTER ────────────────────────────────────────────────────────── -->
+  <footer class="popup-footer">
+    <span id="save-status" class="save-status" aria-live="polite"></span>
+    <p class="footer-note">Settings sync across your devices</p>
+  </footer>
+
+
+  <script src="popup.js"></script>
+</body>
+</html>

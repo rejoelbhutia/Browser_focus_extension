@@ -1,0 +1,79 @@
+/*
+ * hide-distractions.css
+ * Selectors confirmed from debug output on Brave, Chrome, Firefox.
+ * CSS catches elements at load time; JS MutationObserver catches the rest.
+ */
+
+/* ── SHORTS ────────────────────────────────────────────────────────────── */
+
+html.hide-shorts ytm-shorts-lockup-view-model,
+html.hide-shorts ytm-shorts-lockup-view-model-v2 {
+  display: none !important;
+}
+
+html.hide-shorts ytd-rich-item-renderer:has(ytm-shorts-lockup-view-model),
+html.hide-shorts ytd-rich-item-renderer:has(a[href*="/shorts/"]) {
+  display: none !important;
+}
+
+html.hide-shorts ytd-rich-section-renderer,
+html.hide-shorts ytd-rich-shelf-renderer {
+  display: none !important;
+}
+
+/* Search results */
+html.hide-shorts ytd-video-renderer:has(a[href*="/shorts/"]) {
+  display: none !important;
+}
+
+html.hide-shorts grid-shelf-view-model:has(a[href*="/shorts/"]) {
+  display: none !important;
+}
+
+html.hide-shorts ytd-item-section-renderer:has(ytm-shorts-lockup-view-model) {
+  display: none !important;
+}
+
+/* Sidebar nav */
+html.hide-shorts ytd-mini-guide-entry-renderer:has(a[href*="/shorts"]) {
+  display: none !important;
+}
+
+html.hide-shorts ytd-guide-entry-renderer:has(a[href*="/shorts"]) {
+  display: none !important;
+}
+
+
+/* ── WATCH PAGE SIDEBAR ─────────────────────────────────────────────────── */
+
+html.hide-sidebar #secondary,
+html.hide-sidebar ytd-watch-next-secondary-results-renderer {
+  display: none !important;
+}
+
+
+/* ── HOME PAGE GRID ─────────────────────────────────────────────────────── */
+
+html.hide-homepage ytd-browse[page-subtype="home"] ytd-rich-grid-renderer {
+  display: none !important;
+}
+
+html.hide-homepage ytd-browse[page-subtype="home"] #primary::before {
+  content: "🎯 Focus Mode — home feed is hidden.";
+  display: block;
+  text-align: center;
+  padding: 80px 20px;
+  font-size: 18px;
+  color: #aaa;
+  font-family: "YouTube Sans", Roboto, sans-serif;
+}
+
+
+/* ── END CARDS ──────────────────────────────────────────────────────────── */
+
+html.hide-endcards .ytp-ce-element,
+html.hide-endcards .ytp-ce-covering-overlay,
+html.hide-endcards .ytp-endscreen-content,
+html.hide-endcards .ytp-endscreen-element {
+  display: none !important;
+}

@@ -1,0 +1,229 @@
+/*
+ * popup.css
+ * ---------
+ * Styles for the extension popup (the small window that appears when you
+ * click the extension icon in your browser toolbar).
+ *
+ * Design goal: clean, dark, minimal — feels native to YouTube's dark theme.
+ */
+
+
+/* ─── RESET & BASE ────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Color palette */
+  --bg-main:        #0f0f0f;   /* YouTube's dark background */
+  --bg-card:        #1a1a1a;   /* slightly lighter for toggle rows */
+  --bg-hover:       #222222;
+  --border:         #2e2e2e;
+  --text-primary:   #f1f1f1;
+  --text-secondary: #888888;
+  --accent:         #ff0000;   /* YouTube red */
+  --accent-dim:     #cc0000;
+  --on-color:       #ffffff;
+
+  /* Toggle switch dimensions */
+  --switch-width:  44px;
+  --switch-height: 24px;
+  --thumb-size:    18px;
+  --thumb-offset:  3px;        /* gap between thumb and track edge */
+}
+
+body {
+  width: 320px;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: "YouTube Sans", "Roboto", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+/* ─── HEADER ──────────────────────────────────────────────────────────────── */
+
+.popup-header {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+/* Play-button triangle made purely with CSS (no image needed) */
+.logo-icon {
+  width: 32px;
+  height: 22px;
+  background-color: var(--accent);
+  border-radius: 4px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.logo-icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  /* Triangle pointing right */
+  border-style: solid;
+  border-width: 5px 0 5px 9px;
+  border-color: transparent transparent transparent var(--on-color);
+}
+
+.logo-text {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.tagline {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-left: 42px; /* lines up under logo text */
+}
+
+
+/* ─── TOGGLE LIST ─────────────────────────────────────────────────────────── */
+
+.toggle-list {
+  padding: 8px 0;
+}
+
+/* Each row is a <label> so the whole row is clickable */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.15s ease;
+}
+
+.toggle-row:last-child {
+  border-bottom: none;
+}
+
+.toggle-row:hover {
+  background-color: var(--bg-hover);
+}
+
+.toggle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0; /* prevents text overflow breaking layout */
+}
+
+.toggle-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.toggle-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+
+/* ─── TOGGLE SWITCH ───────────────────────────────────────────────────────── */
+
+.toggle-switch {
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Hide the actual <input type="checkbox"> — we style the visual elements */
+.toggle-switch input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* The track (background pill) */
+.switch-track {
+  display: block;
+  width: var(--switch-width);
+  height: var(--switch-height);
+  background-color: #444;
+  border-radius: 999px;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+/* The sliding thumb (circle) */
+.switch-thumb {
+  display: block;
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: var(--thumb-offset);
+  left: var(--thumb-offset);
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+/* When the checkbox IS checked, turn the track red and slide the thumb right */
+.toggle-switch input[type="checkbox"]:checked + .switch-track {
+  background-color: var(--accent);
+}
+
+.toggle-switch input[type="checkbox"]:checked + .switch-track .switch-thumb {
+  transform: translateX(calc(var(--switch-width) - var(--thumb-size) - var(--thumb-offset) * 2));
+}
+
+/* Focus ring for keyboard accessibility */
+.toggle-switch input[type="checkbox"]:focus-visible + .switch-track {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+
+/* ─── FOOTER ──────────────────────────────────────────────────────────────── */
+
+.popup-footer {
+  padding: 10px 20px 14px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.footer-note {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* "Saved!" confirmation message that fades in/out */
+.save-status {
+  font-size: 12px;
+  color: #4caf50; /* green */
+  font-weight: 600;
+  min-height: 16px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.save-status.visible {
+  opacity: 1;
+}

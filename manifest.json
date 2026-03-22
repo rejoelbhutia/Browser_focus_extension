@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Focus Mode",
+  "version": "2.0.0",
+  "description": "Hides YouTube Shorts and recommendations so you can focus on what you came to watch.",
+
+  "permissions": ["storage"],
+
+  "action": {
+    "default_popup": "popup.html"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content.js"],
+      "css": ["hide-distractions.css"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "youtube-focus-mode@your-name.com",
+      "strict_min_version": "109.0"
+    }
+  }
+}
