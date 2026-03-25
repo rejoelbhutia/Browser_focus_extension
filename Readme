@@ -1,201 +1,191 @@
 # 🎯 YouTube Focus Mode
 
-A free, open-source browser extension that blocks YouTube Shorts and recommendations — so you only watch what you actually came to watch.
+A free, open-source browser extension that blocks YouTube Shorts and
+recommendations so you only watch what you actually came to watch.
 
-Built with plain HTML, CSS, and JavaScript. No tracking. No ads. No accounts. Just focus.
+Built with plain HTML, CSS, and JavaScript.
+No tracking. No ads. No accounts. Just focus.
+
+> 📦 **Repository:** https://github.com/rejoelbhutia/Browser_focus_extension
 
 ---
 
-## ✨ Features
+## ✨ What It Does
 
-| Toggle | What it does |
+| Toggle | What gets hidden |
 |---|---|
-| **Block Shorts** | Removes Shorts from the sidebar, home page, search results, and the Shorts nav link |
-| **Hide Sidebar** | Hides the "Up Next" recommendations panel on video watch pages |
-| **Clean Home Page** | Hides the infinite video grid on youtube.com |
-| **Remove End Cards** | Removes the video overlay cards at the end of videos |
+| **Block Shorts** | Shorts cards on home, search results, and the Shorts nav link |
+| **Hide Sidebar** | The "Up Next" recommendations panel on video watch pages |
+| **Clean Home Page** | The infinite video grid on youtube.com |
+| **Remove End Cards** | Clickable video overlays at the end of videos |
 
-All settings are saved locally on your device and persist across sessions.
-
----
-
-## 🌐 Browser Support
-
-| Browser | Supported |
-|---|---|
-| Brave | ✅ |
-| Chrome | ✅ |
-| Edge | ✅ |
-| Firefox | ✅ |
-| Safari (macOS) | ✅ |
-| Opera | ✅ |
+Settings are saved locally and persist after closing the browser.
 
 ---
 
-## 📦 Installation
+## 🚀 Installation
 
-### Step 1 — Download the extension
+### Step 1 — Clone the repository
 
-1. Download or clone this repository
-2. You should have a folder containing these files:
-   ```
-   manifest.json
-   content.js
-   hide-distractions.css
-   popup.html
-   popup.css
-   popup.js
-   ```
+Open your terminal and run:
 
----
+```bash
+git clone https://github.com/rejoelbhutia/Browser_focus_extension.git
+```
 
-### 🦁 Brave
+This downloads the extension into a folder called `Browser_focus_extension`.
+That folder is the extension — you load it directly into your browser below.
 
-1. Open Brave and go to `brave://extensions`
-2. Turn on **Developer mode** (toggle in the top-right corner)
-3. Click **"Load unpacked"**
-4. Select the extension folder
-5. Done — click the extension icon in the toolbar to manage toggles
+> Don't have Git? Click the green **"Code"** button on the
+> [GitHub page](https://github.com/rejoelbhutia/Browser_focus_extension)
+> and select **"Download ZIP"**, then unzip it.
 
 ---
 
-### 🌐 Chrome
-
-1. Open Chrome and go to `chrome://extensions`
-2. Turn on **Developer mode** (toggle in the top-right corner)
-3. Click **"Load unpacked"**
-4. Select the extension folder
-5. Done — click the extension icon in the toolbar to manage toggles
+### Step 2 — Load into your browser
 
 ---
 
-### 🌐 Microsoft Edge
+#### 🦁 Brave
 
-1. Open Edge and go to `edge://extensions`
-2. Turn on **Developer mode** (toggle in the left sidebar)
-3. Click **"Load unpacked"**
-4. Select the extension folder
-5. Done — click the extension icon in the toolbar to manage toggles
-
----
-
-### 🦊 Firefox
-
-> **Note:** Firefox requires a different installation process because it doesn't support loading unpacked extensions permanently without signing. The temporary method below works until you close Firefox.
-
-#### Temporary install (for testing)
-
-1. Open Firefox and go to `about:debugging#/runtime/this-firefox`
-2. Click **"Load Temporary Add-on..."**
-3. Navigate to the extension folder and select the `manifest.json` file
-4. Done — the extension stays active until Firefox is closed
-
-#### Permanent install (recommended)
-
-To install permanently in Firefox, the extension needs to be signed by Mozilla. You can do this for free:
-
-1. Create a free account at [addons.mozilla.org](https://addons.mozilla.org/en-US/developers/)
-2. Go to **Submit a New Add-on**
-3. Choose **"On your own"** (self-distribution)
-4. Zip the extension folder and upload it
-5. Mozilla will sign it and give you a `.xpi` file
-6. Drag and drop the `.xpi` file into Firefox to install permanently
+1. Go to `brave://extensions`
+2. Enable **Developer mode** (toggle, top-right)
+3. Click **Load unpacked**
+4. Select the `Browser_focus_extension` folder
+5. ✅ Done — click the extension icon in the toolbar to toggle features
 
 ---
 
-### 🧭 Opera
+#### 🌐 Chrome
 
-1. Open Opera and go to `opera://extensions`
-2. Turn on **Developer mode** (toggle in the top-right corner)
-3. Click **"Load unpacked"**
-4. Select the extension folder
-5. Done — click the extension icon in the toolbar to manage toggles
+1. Go to `chrome://extensions`
+2. Enable **Developer mode** (toggle, top-right)
+3. Click **Load unpacked**
+4. Select the `Browser_focus_extension` folder
+5. ✅ Done — click the extension icon in the toolbar to toggle features
 
 ---
 
-### 🍎 Safari (macOS)
+#### 🌐 Microsoft Edge
 
-Safari requires converting the extension using Xcode (free, macOS only).
+1. Go to `edge://extensions`
+2. Enable **Developer mode** (toggle, left sidebar)
+3. Click **Load unpacked**
+4. Select the `Browser_focus_extension` folder
+5. ✅ Done — click the extension icon in the toolbar to toggle features
 
-**Requirements:** Mac with Xcode installed (free from the App Store)
+---
+
+#### 🧭 Opera
+
+1. Go to `opera://extensions`
+2. Enable **Developer mode** (toggle, top-right)
+3. Click **Load unpacked**
+4. Select the `Browser_focus_extension` folder
+5. ✅ Done — click the extension icon in the toolbar to toggle features
+
+---
+
+#### 🦊 Firefox
+
+**Temporary install** (resets when Firefox closes):
+
+1. Go to `about:debugging#/runtime/this-firefox`
+2. Click **Load Temporary Add-on...**
+3. Open the `Browser_focus_extension` folder and select `manifest.json`
+4. ✅ Done
+
+**Permanent install:**
+
+Firefox requires extensions to be signed by Mozilla to persist.
+
+1. Zip the `Browser_focus_extension` folder
+2. Create a free account at [addons.mozilla.org](https://addons.mozilla.org/en-US/developers/)
+3. Go to **Submit a New Add-on → On your own**
+4. Upload the zip — Mozilla signs it and gives you a `.xpi` file
+5. Drag and drop the `.xpi` into Firefox to install permanently
+
+---
+
+#### 🍎 Safari (macOS)
+
+**Requirement:** Xcode (free from the Mac App Store)
 
 1. Open Terminal and run:
    ```bash
-   xcrun safari-web-extension-converter /path/to/extension-folder
+   xcrun safari-web-extension-converter /path/to/Browser_focus_extension
    ```
-2. Xcode will open with a generated project — click **Run** (▶)
-3. Open Safari → **Settings** → **Extensions** tab
-4. Check the box next to **YouTube Focus Mode** to enable it
-5. If you see a warning about developer extensions, go to:
-   **Develop** menu → **Allow Unsigned Extensions** (you may need to enable the Develop menu first in Safari Settings → Advanced)
+2. Xcode opens automatically — click **Run (▶)**
+3. In Safari go to **Settings → Extensions** and enable **YouTube Focus Mode**
+
+> If you don't see the Extensions tab:
+> Safari → Settings → Advanced → check **"Show Develop menu"**
+> Then: Develop menu → **Allow Unsigned Extensions**
 
 ---
 
-### 📱 Mobile Browsers
+#### 📱 Firefox for Android
 
-#### Firefox for Android
-1. Open Firefox for Android
-2. Go to `about:debugging` (type it in the address bar)
-3. Tap **"Load Temporary Add-on"**
-4. Select the `manifest.json` file from the extension folder
+1. Install [Firefox for Android](https://play.google.com/store/apps/details?id=org.mozilla.firefox)
+2. Type `about:debugging` in the address bar
+3. Tap **Load Temporary Add-on**
+4. Select `manifest.json` from the `Browser_focus_extension` folder
 
-#### Kiwi Browser (Android — supports Chrome extensions)
-1. Download [Kiwi Browser](https://kiwibrowser.com) from the Play Store
-2. Open Kiwi and tap the **⋮ menu** → Extensions
-3. Tap **"+ (from store)"** or **"Load unpacked"**
-4. Select the extension folder
+#### 📱 Kiwi Browser (Android)
 
-> iOS (iPhone/iPad): Safari on iOS does not support loading custom unpacked extensions. The extension cannot be installed on iOS without going through the App Store review process.
+Kiwi Browser supports Chrome extensions on Android.
+
+1. Install [Kiwi Browser](https://play.google.com/store/apps/details?id=com.kiwibrowser.browser) from the Play Store
+2. Tap **⋮ menu → Extensions → Load unpacked**
+3. Select the `Browser_focus_extension` folder
+
+> **iOS:** Safari on iOS does not support loading custom unpacked extensions.
+> This extension cannot be installed on iPhone or iPad without App Store approval.
 
 ---
 
-## 🔧 How It Works
+## 🔄 Updating to the Latest Version
 
-The extension uses two layers to block content reliably:
+```bash
+cd Browser_focus_extension
+git pull
+```
 
-1. **CSS injection** — A `<style>` tag is injected into the YouTube page with rules that hide matching elements immediately at load time.
-
-2. **MutationObserver** — YouTube is a Single-Page App that injects content dynamically. A MutationObserver watches the DOM for newly added elements and hides them instantly before you see them.
-
-Settings are stored using the browser's local storage API and persist across sessions. Nothing is sent to any server.
+Then go to your browser's extensions page and click the
+**reload icon (↺)** on the extension card. No reinstall needed.
 
 ---
 
 ## 📁 File Structure
 
 ```
-youtube-focus-mode/
+Browser_focus_extension/
 ├── manifest.json          ← Extension configuration
 ├── content.js             ← Injected into every YouTube page
-├── hide-distractions.css  ← CSS rules injected at page load
-├── popup.html             ← Settings UI (shown when clicking the icon)
-├── popup.css              ← Styles for the settings UI
-└── popup.js               ← Logic for the settings toggles
+├── hide-distractions.css  ← CSS rules for hiding elements
+├── popup.html             ← Settings UI popup
+├── popup.css              ← Popup styles
+└── popup.js               ← Popup toggle logic
 ```
 
 ---
 
 ## 🛡️ Privacy
 
-- **No data collection** — nothing is tracked or sent anywhere
-- **No external requests** — the extension makes zero network requests
-- **Local storage only** — your toggle settings are saved only on your device
-- **Open source** — you can read every line of code
+- No data collection — nothing is tracked or sent anywhere
+- No network requests — the extension works fully offline
+- Local storage only — your settings stay on your device
+- Fully open source — read every line at the link above
 
 ---
 
-## 🤝 Contributing
+## 🐛 Found a Bug?
 
-Found a bug or YouTube updated their layout and something broke? Open an issue or submit a pull request.
+YouTube frequently updates its layout and element names, which can
+break selectors. If something stops working, open an issue at:
 
-Since YouTube frequently updates its DOM structure, selector fixes may be needed periodically.
-
----
-
-## 📄 License
-
-MIT License — free to use, modify, and share.
+👉 https://github.com/rejoelbhutia/Browser_focus_extension/issues
 
 ---
 
-*Built to help people spend less time doom-scrolling and more time doing what matters.*
+*Built to help you spend less time scrolling and more time doing what matters.*

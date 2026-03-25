@@ -1,14 +1,22 @@
 /*
- * content.js — v10
+ * content.js — v11
  *
- * DUAL APPROACH:
- * 1. Inject a <style> tag — handles elements present at load time
- * 2. MutationObserver — directly hides elements added dynamically
- *    (YouTube re-renders content constantly; inline style via JS
- *     catches what CSS misses and vice versa)
+ * PERFORMANCE FIX:
+ * The MutationObserver was firing hundreds of times per second (on every
+ * single DOM change), running expensive querySelectorAll calls each time.
+ * This caused YouTube's search page to freeze on the loading spinner.
+ *
+ * Fix: throttle the observer with a debounce — it waits 300ms after the
+ * last DOM change before running, so bursts of changes (like YouTube
+ * rendering search results) only trigger ONE hide pass instead of hundreds.
+ *
+ * APPROACH:
+ * 1. <style> tag injection — handles elements at load time (fast, zero JS cost)
+ * 2. Debounced MutationObserver — catches dynamically added elements
+ *    without hammering the CPU
  */
 
-console.log("[YT Focus v10] starting...");
+console.log("[YT Focus v11] starting...");
 
 
 /* ─── STORAGE API ─────────────────────────────────────────────────────────── */
@@ -16,21 +24,23 @@ console.log("[YT Focus v10] starting...");
 var storageGet, storageSet, storageOnChanged;
 
 if (typeof browser !== "undefined" && browser.storage) {
-  console.log("[YT Focus v10] API: browser");
+  console.log("[YT Focus v11] API: browser (Firefox/Safari)");
   storageGet = function(d, cb) { browser.storage.local.get(d).then(cb).catch(console.error); };
   storageSet = function(i, cb) { browser.storage.local.set(i).then(function(){ if(cb)cb(); }).catch(console.error); };
   storageOnChanged = browser.storage.onChanged;
+
 } else if (typeof chrome !== "undefined" && chrome.storage) {
-  console.log("[YT Focus v10] API: chrome");
+  console.log("[YT Focus v11] API: chrome (Chrome/Brave/Edge)");
   storageGet = function(d, cb) {
-    chrome.storage.local.get(d, function(r) { if(!chrome.runtime.lastError) cb(r); });
+    chrome.storage.local.get(d, function(r) { if (!chrome.runtime.lastError) cb(r); });
   };
   storageSet = function(i, cb) {
-    chrome.storage.local.set(i, function() { if(!chrome.runtime.lastError && cb) cb(); });
+    chrome.storage.local.set(i, function() { if (!chrome.runtime.lastError && cb) cb(); });
   };
   storageOnChanged = chrome.storage.onChanged;
+
 } else {
-  console.error("[YT Focus v10] No storage API.");
+  console.error("[YT Focus v11] No storage API.");
 }
 
 if (!storageGet) throw new Error("[YT Focus] no storage API");
@@ -44,8 +54,9 @@ var current  = Object.assign({}, DEFAULTS);
 
 /* ─── LAYER 1: STYLE TAG ──────────────────────────────────────────────────── */
 /*
- * Injects CSS rules into the page. Fast and persistent.
- * Uses :has() for complex selectors — supported in Brave/Chrome/Firefox.
+ * Injecting a <style> tag is the most efficient way to hide elements.
+ * The browser's CSS engine handles matching — no JS loop needed.
+ * This handles elements that exist at load time at zero CPU cost.
  */
 
 function updateStyleTag(s) {
@@ -53,24 +64,16 @@ function updateStyleTag(s) {
 
   if (s.hideShorts) {
     css.push(
-      /* The shorts card itself */
       "ytm-shorts-lockup-view-model, ytm-shorts-lockup-view-model-v2 { display:none!important }",
-      /* Any grid item wrapping a shorts card or linking to /shorts/ */
       "ytd-rich-item-renderer:has(ytm-shorts-lockup-view-model) { display:none!important }",
       "ytd-rich-item-renderer:has(a[href*='/shorts/']) { display:none!important }",
-      /* Shelf rows */
       "ytd-rich-section-renderer { display:none!important }",
       "ytd-rich-shelf-renderer { display:none!important }",
-      /* Search result rows linking to shorts */
       "ytd-video-renderer:has(a[href*='/shorts/']) { display:none!important }",
-      /* Section wrapping a shorts shelf in search */
       "ytd-item-section-renderer:has(ytm-shorts-lockup-view-model) { display:none!important }",
-      /* Grid shelf in search */
       "grid-shelf-view-model:has(a[href*='/shorts/']) { display:none!important }",
-      /* Left nav: expanded sidebar */
       "ytd-guide-entry-renderer:has(a[href='/shorts']) { display:none!important }",
       "ytd-guide-entry-renderer:has(a[title='Shorts']) { display:none!important }",
-      /* Left nav: mini collapsed sidebar */
       "ytd-mini-guide-entry-renderer:has(a[href='/shorts']) { display:none!important }",
       "ytd-mini-guide-entry-renderer:has(a[title='Shorts']) { display:none!important }"
     );
@@ -103,15 +106,37 @@ function updateStyleTag(s) {
     (document.head || document.documentElement).appendChild(tag);
   }
   tag.textContent = css.join("\n");
-  console.log("[YT Focus v10] style tag updated, rules:", css.length);
 }
 
 
-/* ─── LAYER 2: DIRECT JS HIDING ──────────────────────────────────────────── */
+/* ─── LAYER 2: DEBOUNCED JS HIDING ───────────────────────────────────────── */
 /*
- * Directly sets display:none on elements. Catches what CSS misses
- * (e.g. elements rendered after :has() is evaluated, or edge cases
- * where the CSS specificity loses to YouTube's inline styles).
+ * DEBOUNCE: instead of running on every DOM mutation, we wait 300ms
+ * after the last mutation before doing anything. If YouTube adds 200
+ * elements in a burst (search results loading), we run hideNow() ONCE
+ * after it finishes — not 200 times.
+ *
+ * This is the key performance fix. The old code ran hideNow() on every
+ * single mutation, which froze the page on heavy renders.
+ */
+
+var debounceTimer = null;
+
+function scheduleHide() {
+  /* Cancel any pending run and restart the 300ms countdown */
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(function() {
+    var anyOn = Object.keys(current).some(function(k) { return current[k]; });
+    if (anyOn) hideNow(current);
+  }, 300);
+}
+
+
+/* ─── HIDE ELEMENTS DIRECTLY ─────────────────────────────────────────────── */
+/*
+ * Fallback for elements the CSS engine missed (e.g. elements added after
+ * the style tag was injected, or where :has() specificity loses).
+ * Only runs once per debounce window — much cheaper than before.
  */
 
 function hideNow(s) {
@@ -132,7 +157,6 @@ function hideNow(s) {
     killAll("grid-shelf-view-model", function(el) {
       return !!el.querySelector("a[href*='/shorts/']");
     });
-    /* Nav sidebar — exact href match */
     killAll("ytd-guide-entry-renderer", function(el) {
       return !!el.querySelector("a[href='/shorts'], a[title='Shorts']");
     });
@@ -172,26 +196,34 @@ function killAll(sel, fn) {
 
 
 /* ─── MUTATION OBSERVER ──────────────────────────────────────────────────── */
+/*
+ * Watches for DOM changes but only SCHEDULES a hide pass — the actual
+ * work happens 300ms later via the debounce. This means YouTube's renderer
+ * can add hundreds of elements freely without being interrupted.
+ */
 
 var observer = new MutationObserver(function() {
-  var anyOn = Object.keys(current).some(function(k){ return current[k]; });
-  if (anyOn) hideNow(current);
+  var anyOn = Object.keys(current).some(function(k) { return current[k]; });
+  if (anyOn) scheduleHide();
 });
 
-observer.observe(document.documentElement, { childList: true, subtree: true });
+observer.observe(document.documentElement, {
+  childList: true,
+  subtree:   true,
+});
 
 
 /* ─── LOAD + APPLY ───────────────────────────────────────────────────────── */
 
 function apply(s) {
   current = s;
-  updateStyleTag(s);
-  hideNow(s);
+  updateStyleTag(s);  /* instant — browser CSS engine does the work */
+  hideNow(s);         /* JS pass for anything CSS missed */
 }
 
 function loadAndApply() {
   storageGet(DEFAULTS, function(saved) {
-    console.log("[YT Focus v10] settings:", JSON.stringify(saved));
+    console.log("[YT Focus v11] settings:", JSON.stringify(saved));
     apply(saved);
   });
 }
